@@ -14,7 +14,20 @@
 <body>
 <div ng-controller="MainCtrl">
     <div ng-init="init()">
-        {{test}}
+        <!--{{test}}-->
+    </div>
+    <div ng-init="show_all()" class="ng-cloak">
+        <div class="row">
+        <div class="col-md-8" ng-repeat="item in items">
+            <div class="row">
+                <img class="col-md-4 img-responsive" ng-src="{{item.image_src || '/webapp/img/No_image_available.svg'}}" alt="Responsive image">
+                <div class="col-md-6">Номер: {{item.type}}</div>
+                <div class="col-md-6">{{item.price}} $</div>
+                <div class="col-md-6">Максимум человек: {{item.guests}}</div>
+                <button class="btn btn-default">Забронировать</button>
+            </div>
+            </div>
+        </div>
     </div>
 </div>
 </body>
