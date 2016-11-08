@@ -18,6 +18,9 @@ switch ($command) {
     case "get_all":
         $result = $action->get_all();
         break;
+    case "submit_order":
+        $result = $action->submit_order($params->order);
+        break;
     default:
         $result = "no such option.";
 }

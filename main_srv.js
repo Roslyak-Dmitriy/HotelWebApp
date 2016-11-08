@@ -15,6 +15,24 @@ HotelApp.factory('MainService', function ($http, $log) {
             }).error(function (data, status, headers, config) {
                 $log.info(data);
             });
+        },
+        submit_order: function (callback,order) {
+            $http({
+                method: 'POST',
+                url: './php/service.php',
+                data: {
+                    command: 'submit_order',
+                    order:{
+                        item_id:order.item_id,
+                        name: order.name,
+                        user_email: order.user_email
+                    }
+                }
+            }).success(function (data, status, headers, config) {
+                callback(data);
+            }).error(function (data, status, headers, config) {
+                $log.info(data);
+            });
         }
     }
 });

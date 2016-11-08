@@ -6,6 +6,7 @@ HotelApp.controller('MainCtrl', function ($scope,MainService) {
     $scope.selected2=['от дешевых к дорогим','от дорогих к дешевым'];
     $scope.guests = [1,2,3,4];
     $scope.items = [{id:0,price:0,guests:0,type:'',options_id:0,image_src:''}];
+    $scope.order = {item_id:-1,name:'',user_email:''};
     $scope.orderByprice = function () {
         if($scope.selected2=='от дешевых к дорогим')return 'price'
         else return '-price'
@@ -14,5 +15,9 @@ HotelApp.controller('MainCtrl', function ($scope,MainService) {
         MainService.get_all(function (items) {
             $scope.items = items;
         });
+    };
+    $scope.submit_order = function () {
+        MainService.submit_order (function () {
+        },$scope.order);
     };
 });

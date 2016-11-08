@@ -11,27 +11,27 @@
     <script src="main_ctrl.js"></script>
     <script src="main_srv.js"></script>
 </head>
-<body background="http://localhost:63342/webapp/img/background.jpg">
+<body>
 <div ng-controller="MainCtrl">
     <div ng-init="init()">
         <!--{{test}}-->
         <div class="row col-md-offset-1">
             <div class="col-md-11">
-                <div class="panel panel-primary">
+                <div class="panel panel-default">
                     <div class="panel-heading">
                         <div class="container">
-                        <label class="col-md-1">Гостей:</label>
-                        <div class="col-md-2">
-                        <select ng-model="selected1.guests" class="form-control input-sm">
-                            <option ng-repeat="guest in guests">{{guest}}</option>
-                        </select>
+                            <label class="col-md-1">Гостей:</label>
+                            <div class="col-md-1">
+                                <select ng-model="selected1.guests" class="form-control input-sm">
+                                    <option ng-repeat="guest in guests">{{guest}}</option>
+                                </select>
                             </div>
-                        <div class="col-md-2">
-                            <select ng-model="selected2" class="form-control input-sm">
-                                <option ng-repeat="sel3 in selected2">{{sel3}}</option>
-                            </select>
+                            <div class="col-md-2">
+                                <select ng-model="selected2" class="form-control input-sm">
+                                    <option ng-repeat="sel3 in selected2">{{sel3}}</option>
+                                </select>
+                            </div>
                         </div>
-                            </div>
                         <!--<label>Цена:</label>-->
                         <!--<input type="number" ng-model="selected2.price" placeholder="" class="form-control"/>-->
                     </div>
@@ -44,22 +44,47 @@
                         <div class="col-md-6">
                             <div class="panel panel-primary">
                                 <div class="panel-heading">
-                                        <div class="row">
-                                            <img class="col-md-6 img-responsive"
-                                                 ng-src="{{item.image_src || '/webapp/img/No_image_available.svg'}}">
-                                            <label class="col-md-6">Номер: {{item.type}}</label>
-                                            <label class="col-md-6">Максимум человек: {{item.guests}}</label>
-                                        </div>
-                                        <div class="panel-body">
-                                            <label class="col-md-6">{{item.price}} $</label>
-                                            <button class=" col-md-6 btn btn-default">Забронировать</button>
-                                        </div>
+                                    <div class="row">
+                                        <img class="col-md-6 img-responsive"
+                                             ng-src="{{'./img/No_image_available.svg'}}">
+                                        <label class="col-md-6">Номер: {{item.type}}</label>
+                                        <label class="col-md-6">Максимум человек: {{item.guests}}</label>
+                                    </div>
+                                    <div class="panel-body">
+                                        <label class="col-md-6">{{item.price}} $</label>
+                                        <button class=" col-md-6 btn btn-default" ng-click="order.item_id=item.id"
+                                                data-toggle="modal" data-target="#myModal">Забронировать</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Забронировать номер</h4>
+                </div>
+                <div class="modal-body">
+                    <input type="text" ng-model="order.name" placeholder="credentials" class="form-control"/><br/>
+                    <input type="text" ng-model="order.user_email" placeholder="email" class="form-control"/><br/>
+                    <!--<p>Some text in the modal.</p>-->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default"
+                            ng-click="submit_order()">Подтвердить</button>
+                    <!--<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>-->
+                </div>
+            </div>
+
         </div>
     </div>
 
