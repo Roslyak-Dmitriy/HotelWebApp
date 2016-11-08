@@ -4,9 +4,8 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <link href="./node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="./node_modules/bootstrap/dist/js/jquery.min.js"></script>
-    <script src="./node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="./node_modules/angular/angular.min.js"></script>
+    <script src="./uib/dist/ui-bootstrap.js"></script>
     <script src="app.js"></script>
     <script src="main_ctrl.js"></script>
     <script src="main_srv.js"></script>
@@ -31,7 +30,30 @@
                                     <option ng-repeat="sel3 in selected2">{{sel3}}</option>
                                 </select>
                             </div>
-                        </div>
+                            <label class="col-md-1">Заезд:</label>
+                            <div class="col-md-2">
+                                <p class="input-group">
+                                    <input type="text" class="form-control" uib-datepicker-popup ng-model="dt1"
+                                           is-open="dt1popup.opened" datepicker-options="dtoptions" ng-required="true"/>
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-default" ng-click="dt1open()">
+                                            <i class="glyphicon glyphicon-calendar"></i>
+                                        </button>
+                                    </span>
+                                </p>
+                            </div>
+                            <label class="col-md-1">Выезд:</label>
+                            <div class="col-md-2">
+                                <p class="input-group">
+                                    <input type="text" class="form-control" uib-datepicker-popup ng-model="dt2"
+                                           is-open="dt2popup.opened" datepicker-options="dtoptions" ng-required="true"/>
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-default" ng-click="dt2open()">
+                                            <i class="glyphicon glyphicon-calendar"></i>
+                                        </button>
+                                    </span>
+                                </p>
+                            </div>
                         <!--<label>Цена:</label>-->
                         <!--<input type="number" ng-model="selected2.price" placeholder="" class="form-control"/>-->
                     </div>
