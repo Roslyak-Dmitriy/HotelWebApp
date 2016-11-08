@@ -16,7 +16,7 @@ HotelApp.factory('MainService', function ($http, $log) {
                 $log.info(data);
             });
         },
-        submit_order: function (callback,order) {
+        submit_order: function (callback,order,date) {
             $http({
                 method: 'POST',
                 url: './php/service.php',
@@ -26,6 +26,10 @@ HotelApp.factory('MainService', function ($http, $log) {
                         item_id:order.item_id,
                         name: order.name,
                         user_email: order.user_email
+                    },
+                    date:{
+                        in: date.in,
+                        out:date.out
                     }
                 }
             }).success(function (data, status, headers, config) {
