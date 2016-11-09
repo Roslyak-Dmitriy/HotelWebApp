@@ -78,6 +78,8 @@ class Hotel
                     'Номер: ' . $room_type . PHP_EOL .
                     'Гостей: ' . $guests . PHP_EOL .
                     'Включено: ' . $desc . PHP_EOL .
+                    'Дата въезда: ' . $dt_in . PHP_EOL .
+                    'Дата выезда: ' . $dt_out . PHP_EOL .
                     'Сумма: ' . $price . ' $');
             $mailer->send($message);
             return 'success';
