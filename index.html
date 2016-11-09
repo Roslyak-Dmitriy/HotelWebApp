@@ -75,7 +75,7 @@
                                             <label class="col-sm-6 col-md-6">Включено: {{item.options}}</label>
                                         </div>
                                         <div class="panel-body">
-                                            <label class="col-sm-6 col-md-6">{{item.price}} $</label>
+                                            <label class="col-sm-6 col-md-6">{{item.price *count_days()}} $</label>
                                             <button class="col-sm-6 col-md-6 btn btn-default" ng-click="openComponentModal(date,item.id)">
                                                 Забронировать
                                             </button>

@@ -11,6 +11,16 @@ HotelApp.controller('MainCtrl', function ($scope,MainService,$uibModal) {
     $scope.date = {in:'',out:''};
     $scope.dt1open = function() {$scope.dt1popup.opened = true;};
     $scope.dt2open = function() {$scope.dt2popup.opened = true;};
+
+    $scope.count_days = function () {
+        var temp = Date.parse($scope.date.out)-Date.parse($scope.date.in);
+        if(temp>0)
+        {
+            var oneDay = 24*60*60*1000; // hours*minutes*seconds*milliseconds
+            var diffDays = Math.round(Math.abs(temp/(oneDay)));
+            return diffDays;
+        }else return 1;
+    };
     $scope.orderByprice = function () {
         if($scope.selected2=='от дешевых к дорогим')return 'price';
         else return '-price';
@@ -21,13 +31,16 @@ HotelApp.controller('MainCtrl', function ($scope,MainService,$uibModal) {
         });
     };
     $scope.openComponentModal = function (date,item_id) {
+        var datea = {in:'',out:''};
+        datea.in = date.in.toDateString();
+        datea.out = date.out.toDateString();
         var modalInstance = $uibModal.open({
             animation: true,
             templateUrl: 'myModalContent.html',
             component: 'modalComponent',
             resolve: {
                 date: function () {
-                      return date;
+                      return datea;
                 },
                 item_id: function () {
                     return item_id;

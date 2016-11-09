@@ -40,9 +40,15 @@ class Hotel
         if ($result->num_rows > 0) {
             $price = $result->fetch_row();
         }
-        if($price==-1) return null;
-        else $price=$price[0];
-        $query = "INSERT INTO orders SET name1='$order->name',email='$order->user_email',item_id='$order->item_id',date_in='$date->in',date_out='$date->out',price='$price'";
+        if($price==-1) return null; else $price=$price[0];
+
+        $dt_in = new DateTime($date->in);
+        $dt_out = new DateTime($date->out);
+        $interval = $dt_in->diff($dt_out);
+        $price*=$interval->days;
+        $dt_in=date_format($dt_in,'Y-m-d');
+        $dt_out=date_format($dt_out,'Y-m-d');
+        $query = "INSERT INTO orders SET name1='$order->name',email='$order->user_email',item_id='$order->item_id',date_in='$dt_in',date_out='$dt_out',price='$price'";
 
         $userData = [];
         $result = $connection->query($query);
