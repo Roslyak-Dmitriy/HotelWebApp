@@ -48,20 +48,32 @@ class Hotel
         $price*=$interval->days;
         $dt_in=date_format($dt_in,'Y-m-d');
         $dt_out=date_format($dt_out,'Y-m-d');
-        $query = "INSERT INTO orders SET name1='$order->name',email='$order->user_email',item_id='$order->item_id',date_in='$dt_in',date_out='$dt_out',price='$price'";
+        $query = "INSERT INTO orders SET name1='$order->name',email='$order->user_email',item_id='$order->item_id'".
+            ",date_in='$dt_in',date_out='$dt_out',price='$price'";
 
+        $db_data = null;
         $connection->query($query);
+        $query ="SELECT * FROM items WHERE id='$order->item_id'";
+        $result = $connection->query($query);
+        if ($result->num_rows > 0) {
+            $db_data = $result->fetch_row();
+        }
+        $room_type=$db_data[2];$guests=$db_data[4];$desc=$db_data[5];
         mysqli_close($connection);
-        
+
         $transport = Swift_SmtpTransport::newInstance('localhost', 25);//localhost
         $mailer = Swift_Mailer::newInstance($transport);
 
         $message = Swift_Message::newInstance('HotelWebApp')
             ->setFrom(array('hotelwebapp@localhost' => 'John Doe'))
             ->addTo($order->user_email, $order->name)//'test@localhost'
-            ->setBody('Here is the message itself')
-            ->attach(Swift_Attachment::fromPath('../img/No_image_available.svg'))
-        ;
+            ->setBody('Здравствуйте, '.$order->name .'!'.PHP_EOL.
+                'Спасибо что воспользовались услугами HotelWebApp'.PHP_EOL.
+                'Номер вашего заказа: '.$order->item_id.PHP_EOL.
+                'Номер: '.$room_type.PHP_EOL.
+                'Гостей: '.$guests.PHP_EOL.
+                'Включено: '.$desc.PHP_EOL.
+                'Сумма: '.$price);
         $mailer->send($message);
         return 'success';
     }
