@@ -1,13 +1,13 @@
 <?php
-require_once 'host.php';
-
+require_once 'host_db.php';
+require_once '../swiftmailer/swift_required.php';
 class Hotel
 {
     public static function get_all()
     {
-        $host = Host::getLocal();
+        $host_db = Host_DB::getLocal();
         error_reporting(0);
-        $connection = mysqli_connect($host[0], $host[1], $host[2], $host[3]) or die (json_encode("Error " . mysqli_error($connection)));
+        $connection = mysqli_connect($host_db[0], $host_db[1], $host_db[2], $host_db[3]) or die (json_encode("Error " . mysqli_error($connection)));
         $connection->query('SET NAMES utf8');
 
         $query = "SELECT * FROM items";
@@ -28,9 +28,9 @@ class Hotel
     }
     public static function submit_order($order,$date)
     {
-        $host = Host::getLocal();
+        $host_db = Host_DB::getLocal();
         error_reporting(0);
-        $connection = mysqli_connect($host[0], $host[1], $host[2], $host[3]) or die (json_encode("Error " . mysqli_error($connection)));
+        $connection = mysqli_connect($host_db[0], $host_db[1], $host_db[2], $host_db[3]) or die (json_encode("Error " . mysqli_error($connection)));
         $connection->query('SET NAMES utf8');
 
        // $dt = date('Y-m-d H:i:s');
@@ -40,7 +40,7 @@ class Hotel
         if ($result->num_rows > 0) {
             $price = $result->fetch_row();
         }
-        if($price==-1) return null; else $price=$price[0];
+        if($price==-1) return 'no matching item'; else $price=$price[0];
 
         $dt_in = new DateTime($date->in);
         $dt_out = new DateTime($date->out);
@@ -50,18 +50,19 @@ class Hotel
         $dt_out=date_format($dt_out,'Y-m-d');
         $query = "INSERT INTO orders SET name1='$order->name',email='$order->user_email',item_id='$order->item_id',date_in='$dt_in',date_out='$dt_out',price='$price'";
 
-        $userData = [];
-        $result = $connection->query($query);
-        if ($result->num_rows > 0) {
-            while ($row = $result->fetch_assoc()) {
-                $userData[] = $row;
-            }
-        }
+        $connection->query($query);
         mysqli_close($connection);
-        if (count($userData)) {
-            return $userData;
-        } else {
-            return null;
-        }
+        
+        $transport = Swift_SmtpTransport::newInstance('localhost', 25);//localhost
+        $mailer = Swift_Mailer::newInstance($transport);
+
+        $message = Swift_Message::newInstance('HotelWebApp')
+            ->setFrom(array('hotelwebapp@localhost' => 'John Doe'))
+            ->addTo($order->user_email, $order->name)//'test@localhost'
+            ->setBody('Here is the message itself')
+            ->attach(Swift_Attachment::fromPath('../img/No_image_available.svg'))
+        ;
+        $mailer->send($message);
+        return 'success';
     }
 }

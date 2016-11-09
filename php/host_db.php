@@ -1,6 +1,6 @@
 <?php
 
-class Host{
+class Host_DB{
 
     private static $localHost = ["localhost", "root", "", "hotel_db"];
     private static $serverHost = ["", "", "", ""];

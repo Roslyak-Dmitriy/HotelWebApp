@@ -6,12 +6,10 @@
  * Time: 22:35
  */
 
-require_once 'host.php';
+require_once 'host_db.php';
 require_once 'hotel.php';
 
-$host = Host::getLocal();
-
-$action = new hotel();
+$action = new Hotel();
 $params = json_decode(file_get_contents('php://input'));
 $command = $params->command;
 switch ($command) {
