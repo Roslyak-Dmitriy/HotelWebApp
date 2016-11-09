@@ -2,7 +2,7 @@
 <html ng-app="HotelApp" lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>HotelWebApp</title>
     <link href="./node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="./node_modules/angular/angular.min.js"></script>
     <script src="./uib/dist/ui-bootstrap.js"></script>
@@ -13,66 +13,77 @@
 <body>
 <div ng-controller="MainCtrl">
     <div ng-init="init()">
-        <!--{{test}}-->
-        <div>{{submit_res}}</div>
+        <!--<div>{{submit_res}}</div>-->
         <div class="row col-md-offset-1">
             <div class="col-md-11">
-                <div class="panel panel-default">
+                <div class="panel panel-primary">
                     <div class="panel-heading">
                         <div class="container">
-                            <label class="col-md-1">Гостей:</label>
-                            <div class="col-md-1">
-                                <select ng-model="selected1.guests" class="form-control input-sm">
-                                    <option ng-repeat="guest in guests">{{guest}}</option>
-                                </select>
-                            </div>
+
                             <div class="col-md-2">
+                                <label class="col-md-12">Гостей:</label>
+                                <div class="col-md-12">
+                                    <select ng-model="selected1.guests" class="form-control input-sm">
+                                        <option ng-repeat="guest in guests">{{guest}}</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                           <div class="col-md-2">
+                               <label class="col-md-12">Сортировать:</label>
+                               <div class="col-md-12">
                                 <select ng-model="selected2" class="form-control input-sm">
-                                    <option ng-repeat="sel3 in selected2">{{sel3}}</option>
+                                    <option ng-repeat="sel2 in selected2">{{sel2}}</option>
                                 </select>
-                            </div>
-                            <label class="col-md-1">Заезд:</label>
-                            <div class="col-md-2">
-                                <p class="input-group">
-                                    <input type="text" class="form-control" uib-datepicker-popup ng-model="date.in"
-                                           is-open="dt1popup.opened" datepicker-options="dtoptions" ng-required="true"/>
-                                    <span class="input-group-btn">
+                            </div></div>
+
+                            <div class="col-md-3">
+                                <label class="col-md-12">Заезд:</label>
+                                <div class="col-md-12">
+                                    <p class="input-group">
+                                        <input type="text" class="form-control" uib-datepicker-popup ng-model="date.in"
+                                               is-open="dt1popup.opened" datepicker-options="dtoptions"
+                                               ng-required="true"/>
+                                        <span class="input-group-btn">
                                         <button type="button" class="btn btn-default" ng-click="dt1open()">
                                             <i class="glyphicon glyphicon-calendar"></i>
                                         </button>
                                     </span>
-                                </p>
+                                    </p>
+                                </div>
                             </div>
-                            <label class="col-md-1">Выезд:</label>
-                            <div class="col-md-2">
-                                <p class="input-group">
-                                    <input type="text" class="form-control" uib-datepicker-popup ng-model="date.out"
-                                           is-open="dt2popup.opened" datepicker-options="dtoptions" ng-required="true"/>
-                                    <span class="input-group-btn">
+
+                            <div class="col-md-3">
+                                <label class="col-md-12">Выезд:</label>
+                                <div class="col-md-12">
+                                    <p class="input-group">
+                                        <input type="text" class="form-control" uib-datepicker-popup ng-model="date.out"
+                                               is-open="dt2popup.opened" datepicker-options="dtoptions"
+                                               ng-required="true"/>
+                                        <span class="input-group-btn">
                                         <button type="button" class="btn btn-default" ng-click="dt2open()">
                                             <i class="glyphicon glyphicon-calendar"></i>
                                         </button>
                                     </span>
-                                </p>
+                                    </p>
+                                </div>
                             </div>
-                            <!--<label>Цена:</label>-->
-                            <!--<input type="number" ng-model="selected2.price" placeholder="" class="form-control"/>-->
                         </div>
                     </div>
                 </div>
 
                 <div ng-init="show_all()" class="ng-cloak col-md-12">
-                    <div class="row">
-                        <div ng-repeat="item in items|filter: selected1|orderBy:orderByprice()">
+                    <div class="row" >
+                        <div ng-repeat="item in items|filter: selected1|orderBy:orderBy_price()">
                             <div class="col-md-6">
                                 <div class="panel panel-primary">
                                     <div class="panel-heading">
                                         <div class="row">
-                                            <img class="col-sm-6 col-md-6 img-responsive"
-                                                 ng-src="{{item.image_src||'./img/No_image_available.svg'}}">
-                                            <label class="col-sm-6 col-md-6">Номер: {{item.type}}</label>
-                                            <label class="col-sm-6 col-md-6">Максимум человек: {{item.guests}}</label>
-                                            <label class="col-sm-6 col-md-6">Включено: {{item.options}}</label>
+                                            <img class="col-xs-12 col-sm-6 col-md-12" style="height: 300px"
+                                                 ng-src="{{item.image_src}}">
+                                            <label class="col-xs-10 col-sm-6 col-md-12">Номер: {{item.type}}</label>
+                                            <label class="col-xs-10 col-sm-6 col-md-12">Максимум человек: {{item.guests}}</label>
+                                            <label class="col-xs-10 col-sm-6 col-md-12">Включено: {{item.options}}</label>
                                         </div>
                                         <div class="panel-body">
                                             <label class="col-sm-6 col-md-6">{{item.price *count_days()}} $</label>
@@ -94,12 +105,15 @@
                 <h3 class="modal-title" id="modal-title">Забронировать номер</h3>
             </div>
             <div class="modal-body" id="modal-body">
-                <input type="text" ng-model="$ctrl.order.name" placeholder="Фамилия Имя" class="form-control"/><br/>
-                <input type="text" ng-model="$ctrl.order.user_email" placeholder="email" class="form-control"/><br/>
-                <div>{{$ctrl.item_id}}</div>
+                <form name="myForm">
+                    <input class="form-control" type="text" ng-model="$ctrl.order.name"
+                           placeholder="Фамилия Имя" required/><br/>
+                    <input class="form-control" type="email" ng-model="$ctrl.order.user_email"
+                           placeholder="email" required/><br/>
+                </form>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-primary" type="button" ng-click="$ctrl.ok()">OK</button>
+                <button class="btn btn-primary" type="button" ng-click="$ctrl.ok(myForm.$valid)">OK</button>
                 <button class="btn btn-warning" type="button" ng-click="$ctrl.cancel()">Cancel</button>
             </div>
         </script>

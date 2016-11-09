@@ -3,15 +3,21 @@
  */
 HotelApp.controller('MainCtrl', function ($scope,MainService,$uibModal) {
     $scope.test = 'Hello world';
-    $scope.selected2=['от дешевых к дорогим','от дорогих к дешевым'];
-    $scope.guests = [1,2,3,4];
-    $scope.items = [{id:0,price:0,guests:0,type:'',options:'',image_src:''}];
-    $scope.dt1popup = {opened: false};$scope.dt2popup = {opened: false};
-    $scope.dtoptions = {minDate: new Date(),showWeeks: false};
-    $scope.date = {in:'',out:''};
-    $scope.dt1open = function() {$scope.dt1popup.opened = true;};
-    $scope.dt2open = function() {$scope.dt2popup.opened = true;};
-
+    $scope.init = function () {
+        $scope.selected2=['от дешевых к дорогим','от дорогих к дешевым'];
+        $scope.guests = [1,2,3,4];
+        $scope.items = [{id:0,price:0,guests:0,type:'',options:'',image_src:''}];
+        $scope.dt1popup = {opened: false};$scope.dt2popup = {opened: false};
+        $scope.dtoptions = {minDate: new Date(),showWeeks: false};
+        function addDays(date, days) {
+            var result = new Date(date);
+            result.setDate(result.getDate() + days);
+            return result;
+        }
+        $scope.date = {in:new Date(),out:addDays(new Date(),1)};
+        $scope.dt1open = function() {$scope.dt1popup.opened = true;};
+        $scope.dt2open = function() {$scope.dt2popup.opened = true;};
+    };
     $scope.count_days = function () {
         var temp = Date.parse($scope.date.out)-Date.parse($scope.date.in);
         if(temp>0)
@@ -21,7 +27,7 @@ HotelApp.controller('MainCtrl', function ($scope,MainService,$uibModal) {
             return diffDays;
         }else return 1;
     };
-    $scope.orderByprice = function () {
+    $scope.orderBy_price = function () {
         if($scope.selected2=='от дешевых к дорогим')return 'price';
         else return '-price';
     };
@@ -31,28 +37,31 @@ HotelApp.controller('MainCtrl', function ($scope,MainService,$uibModal) {
         });
     };
     $scope.openComponentModal = function (date,item_id) {
-        var datea = {in:'',out:''};
-        datea.in = date.in.toDateString();
-        datea.out = date.out.toDateString();
-        var modalInstance = $uibModal.open({
-            animation: true,
-            templateUrl: 'myModalContent.html',
-            component: 'modalComponent',
-            resolve: {
-                date: function () {
-                      return datea;
-                },
-                item_id: function () {
-                    return item_id;
+        var temp = Date.parse(date.out)-Date.parse(date.in);
+        if(temp>0) {
+            var datea = {in: '', out: ''};
+            datea.in = date.in.toDateString();
+            datea.out = date.out.toDateString();
+            var modalInstance = $uibModal.open({
+                animation: true,
+                templateUrl: 'myModalContent.html',
+                component: 'modalComponent',
+                resolve: {
+                    date: function () {
+                        return datea;
+                    },
+                    item_id: function () {
+                        return item_id;
+                    }
                 }
-            }
-        });
+            });
 
-        modalInstance.result.then(function (submit_res) {
-            $scope.submit_res = submit_res;
-        }, function () {
-            // $log.info('modal-component dismissed at: ' + $scope.submit_res);
-        });
+            modalInstance.result.then(function (submit_res) {
+                $scope.submit_res = submit_res;
+            }, function () {
+                // $log.info('modal-component dismissed at: ' + $scope.submit_res);
+            });
+        }
     };
 });
 HotelApp.component('modalComponent', {
@@ -70,12 +79,12 @@ HotelApp.component('modalComponent', {
             $ctrl.date = $ctrl.resolve.date;
         };
 
-        $ctrl.ok = function () {
-            // $scope.submit_order = function () {
-                MainService.submit_order (function () {
-                },$ctrl.order,$ctrl.date);
-            // };
-            $ctrl.close({$value: true});
+        $ctrl.ok = function (is_valid) {
+            if(is_valid) {
+                MainService.submit_order(function () {
+                }, $ctrl.order, $ctrl.date);
+                $ctrl.close({$value: true});
+            }
         };
 
         $ctrl.cancel = function () {
