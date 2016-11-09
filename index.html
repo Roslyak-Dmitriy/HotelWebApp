@@ -30,13 +30,14 @@
                                 </div>
                             </div>
 
-                           <div class="col-md-2">
-                               <label class="col-md-12">Сортировать:</label>
-                               <div class="col-md-12">
-                                <select ng-model="selected2" class="form-control input-sm">
-                                    <option ng-repeat="sel2 in selected2">{{sel2}}</option>
-                                </select>
-                            </div></div>
+                            <div class="col-md-2">
+                                <label class="col-md-12">Сортировать:</label>
+                                <div class="col-md-12">
+                                    <select ng-model="selected_sort" class="form-control input-sm">
+                                        <option ng-repeat="x in sort_price" value="{{x.sort}}">{{x.text}}</option>
+                                    </select>
+                                </div>
+                            </div>
 
                             <div class="col-md-3">
                                 <label class="col-md-12">Заезд:</label>
@@ -74,16 +75,16 @@
                 </div>
                 <div ng-init="show_all()" class="ng-cloak col-md-12">
                     <div class="row">
-                        <div ng-repeat="item in items|filter: selected1|orderBy:orderBy_price()">
+                        <div ng-repeat="item in items1|filter: selected1 | orderBy: selected_sort">
                             <div class="col-md-6">
                                 <div class="panel panel-primary">
                                     <div class="panel-heading">
                                         <div class="row">
-                                            <img class="col-xs-12 col-sm-6 col-md-12" style="height: 300px"
+                                            <img class="col-xs-12 col-sm-6 col-md-12" style="height: 270px"
                                                  ng-src="{{item.image_src}}">
                                             <label class="col-xs-10 col-sm-6 col-md-12">Номер: {{item.type}}</label>
                                             <label class="col-xs-10 col-sm-6 col-md-12">Максимум человек: {{item.guests}}</label>
-                                            <label class="col-xs-10 col-sm-6 col-md-12" style="height: 100px">Включено: {{item.options}}</label>
+                                            <label class="col-xs-10 col-sm-6 col-md-12" style="height: 80px">Включено: {{item.options}}</label>
                                         </div>
                                         <div class="panel-body">
                                             <label class="col-sm-6 col-md-6">{{item.price *count_days()}} $</label>

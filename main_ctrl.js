@@ -2,11 +2,12 @@
  * Created by formu on 06.11.2016.
  */
 HotelApp.controller('MainCtrl', function ($scope,MainService,$uibModal) {
-    $scope.test = 'Hello world';
+    // $scope.test = 'Hello world';
     $scope.init = function () {
-        $scope.selected2=['от дешевых к дорогим','от дорогих к дешевым'];
-        $scope.guests = [1,2,3,4];
-        $scope.items = [{id:0,price:0,guests:0,type:'',options:'',image_src:''}];
+        $scope.selected_sort ='-price';
+        $scope.sort_price=[{text:'от дешевых к дорогим',sort:'price'},{text:'от дорогих к дешевым',sort:'-price'}];
+        $scope.guests = [1];
+        $scope.items1 = [{id:0,price:0,guests:0,type:'',options:'',image_src:''}];
         $scope.dt1popup = {opened: false};$scope.dt2popup = {opened: false};
         $scope.dtoptions = {minDate: new Date(),showWeeks: false};
         function addDays(date, days) {
@@ -27,13 +28,22 @@ HotelApp.controller('MainCtrl', function ($scope,MainService,$uibModal) {
             return diffDays;
         }else return 1;
     };
-    $scope.orderBy_price = function () {
-        if($scope.selected2=='от дешевых к дорогим')return 'price';
-        else return '-price';
-    };
     $scope.show_all = function () {
         MainService.get_all(function (items) {
-            $scope.items = items;
+            var max_guest_count=0;
+            for(var i=0;i<items.length;i++)
+            {
+                if(items[i].guests>max_guest_count)
+                {
+                    max_guest_count= items[i].guests;
+                }
+                $scope.items1[i] = items[i];
+                $scope.items1[i].price = parseInt(items[i].price);
+            }
+            for(var i=0;i<max_guest_count;i++)
+            {
+                $scope.guests[i]=i+1;
+            }
         });
     };
     $scope.openComponentModal = function (date,item_id) {
